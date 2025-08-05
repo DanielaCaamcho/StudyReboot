@@ -1,5 +1,11 @@
 # StudyReboot 📚🚀
 
+[![Deploy Status](https://github.com/DanielaCaamcho/study-reboot/workflows/Deploy%20StudyReboot/badge.svg)](https://github.com/DanielaCaamcho/study-reboot/actions)
+[![Live Demo](https://img.shields.io/badge/demo-live-brightgreen)](https://danielacaamcho.github.io/study-reboot/)
+[![React](https://img.shields.io/badge/React-18.0-blue)](https://reactjs.org/)
+[![TypeScript](https://img.shields.io/badge/TypeScript-5.0-blue)](https://www.typescriptlang.org/)
+[![Vite](https://img.shields.io/badge/Vite-7.0-purple)](https://vitejs.dev/)
+
 Una aplicación web moderna y completa para gestionar tu tiempo de estudio, mantener la motivación y hacer seguimiento de tu progreso académico. Construida con React, TypeScript y Vite.
 
 ## ✨ Características Principales
