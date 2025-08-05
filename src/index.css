@@ -1,0 +1,20 @@
+/* Reset básico para evitar interferencias con nuestros estilos */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html, body {
+  height: 100%;
+  font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
+  line-height: 1.5;
+  font-weight: 400;
+  background-color: #ffffff;
+  color: #213547;
+}
+
+#root {
+  height: 100%;
+  width: 100%;
+}
