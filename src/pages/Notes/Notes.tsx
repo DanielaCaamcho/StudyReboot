@@ -22,7 +22,7 @@ export function Notes() {
   );
 
   const handleSave = () => {
-    if (formData.title.trim() && formData.content.trim() && formData.category.trim()) {
+    if (formData.title.trim() && formData.content.trim()) {
       if (editingNote) {
         // Update existing note
         setNotes(prev =>
@@ -36,7 +36,9 @@ export function Notes() {
         // Create new note
         const newNote: Note = {
           id: Date.now().toString(),
-          ...formData,
+          title: formData.title.trim(),
+          content: formData.content.trim(),
+          category: formData.category.trim() || 'General',
           createdAt: new Date(),
           updatedAt: new Date()
         };
@@ -63,7 +65,7 @@ export function Notes() {
   };
 
   const handleDeleteNote = (id: string) => {
-    if (confirm('Are you sure you want to delete this note?')) {
+    if (confirm('¿Estás seguro de que quieres eliminar esta nota?')) {
       setNotes(prev => prev.filter(note => note.id !== id));
     }
   };
@@ -73,7 +75,7 @@ export function Notes() {
       <header className={styles.header}>
         <h1 className={styles.title}>
           <FileText className={styles.titleIcon} size={28} />
-          Notes
+          Notas
         </h1>
         <button 
           className={styles.addButton}
@@ -81,27 +83,29 @@ export function Notes() {
         >
           <Plus size={24} />
           <span style={{ display: window.innerWidth >= 768 ? 'inline' : 'none' }}>
-            Add Note
+            Agregar Nota
           </span>
         </button>
       </header>
 
       <div className={styles.searchContainer}>
-        <Search className={styles.searchIcon} size={20} />
-        <input
-          type="text"
-          placeholder="Search notes..."
-          value={searchTerm}
-          onChange={(e) => setSearchTerm(e.target.value)}
-          className={`input ${styles.searchInput}`}
-        />
+        <div className={styles.searchWrapper}>
+          <Search className={styles.searchIcon} size={20} />
+          <input
+            type="text"
+            placeholder="Buscar notas..."
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+            className={styles.searchInput}
+          />
+        </div>
       </div>
 
       <div className={styles.notesList}>
         {filteredNotes.length === 0 ? (
           <div className={styles.emptyState}>
             <FileText className={styles.emptyIcon} size={48} />
-            <p>No notes found. Create your first note!</p>
+            <p>No se encontraron notas. ¡Crea tu primera nota!</p>
           </div>
         ) : (
           filteredNotes.map(note => (
@@ -134,7 +138,7 @@ export function Notes() {
           <div className={styles.modalContent}>
             <div className={styles.modalHeader}>
               <h2 className={styles.modalTitle}>
-                {editingNote ? 'Edit Note' : 'Create New Note'}
+                {editingNote ? 'Editar Nota' : 'Crear Nueva Nota'}
               </h2>
               <button className={styles.closeButton} onClick={handleCloseModal}>
                 <X size={24} />
@@ -142,34 +146,34 @@ export function Notes() {
             </div>
 
             <div className={styles.formGroup}>
-              <label className={styles.label}>Title</label>
+              <label className={styles.label}>Título</label>
               <input
                 type="text"
                 value={formData.title}
                 onChange={(e) => setFormData(prev => ({ ...prev, title: e.target.value }))}
                 className="input"
-                placeholder="Enter note title..."
+                placeholder="Ingresa el título de la nota..."
               />
             </div>
 
             <div className={styles.formGroup}>
-              <label className={styles.label}>Category</label>
+              <label className={styles.label}>Categoría</label>
               <input
                 type="text"
                 value={formData.category}
                 onChange={(e) => setFormData(prev => ({ ...prev, category: e.target.value }))}
                 className="input"
-                placeholder="e.g., Biology, Math, History"
+                placeholder="ej. Biología, Matemáticas, Historia"
               />
             </div>
 
             <div className={styles.formGroup}>
-              <label className={styles.label}>Content</label>
+              <label className={styles.label}>Contenido</label>
               <textarea
                 value={formData.content}
                 onChange={(e) => setFormData(prev => ({ ...prev, content: e.target.value }))}
                 className="input textarea"
-                placeholder="Write your note content here..."
+                placeholder="Escribe el contenido de tu nota aquí..."
                 rows={8}
               />
             </div>
@@ -183,14 +187,14 @@ export function Notes() {
                     handleCloseModal();
                   }}
                 >
-                  Delete
+                  Eliminar
                 </button>
               )}
               <button className="btn btn-secondary" onClick={handleCloseModal}>
-                Cancel
+                Cancelar
               </button>
               <button className="btn btn-primary" onClick={handleSave}>
-                {editingNote ? 'Update' : 'Save'}
+                {editingNote ? 'Actualizar' : 'Guardar'}
               </button>
             </div>
           </div>
