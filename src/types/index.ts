@@ -33,6 +33,27 @@ export interface Task {
   category?: string;
 }
 
+export interface TodoItem {
+  id: string;
+  text: string;
+  isCompleted: boolean;
+  priority: 'low' | 'medium' | 'high';
+  category: 'personal' | 'work' | 'study' | 'health' | 'other';
+  createdAt: Date;
+  completedAt?: Date;
+  dueDate?: string;
+}
+
+export interface TodoList {
+  id: string;
+  title: string;
+  type: 'weekly' | 'monthly';
+  items: TodoItem[];
+  createdAt: Date;
+  weekStart?: string; // Para listas semanales (formato YYYY-MM-DD)
+  month?: string; // Para listas mensuales (formato YYYY-MM)
+}
+
 export interface CalendarEvent {
   id: string;
   title: string;
@@ -59,7 +80,7 @@ export interface StudyStats {
   weeklyData: { day: string; hours: number }[];
 }
 
-export type Page = 'home' | 'questions' | 'notes' | 'calendar' | 'mood' | 'login' | 'stats';
+export type Page = 'home' | 'questions' | 'notes' | 'calendar' | 'mood' | 'login' | 'stats' | 'todolist';
 
 export interface User {
   id: string;

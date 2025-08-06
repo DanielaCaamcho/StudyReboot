@@ -1,4 +1,4 @@
-import { Brain, BookOpen, Calendar, Heart, CheckSquare, BarChart3, User } from 'lucide-react';
+import { Brain, BookOpen, Calendar, Heart, CheckSquare, BarChart3, User, HelpCircle } from 'lucide-react';
 import type { Page } from '../../types';
 import styles from './TopNav.module.css';
 
@@ -10,8 +10,9 @@ interface TopNavProps {
 export function TopNav({ currentPage, onPageChange }: TopNavProps) {
   const navItems = [
     { id: 'home' as Page, label: 'Inicio', icon: Brain },
-    { id: 'questions' as Page, label: 'Preguntas', icon: CheckSquare },
+    { id: 'questions' as Page, label: 'Preguntas', icon: HelpCircle },
     { id: 'notes' as Page, label: 'Notas', icon: BookOpen },
+    { id: 'todolist' as Page, label: 'Todo List', icon: CheckSquare },
     { id: 'calendar' as Page, label: 'Calendario', icon: Calendar },
     { id: 'stats' as Page, label: 'Estadísticas', icon: BarChart3 },
     { id: 'mood' as Page, label: 'Estado de Ánimo', icon: Heart },

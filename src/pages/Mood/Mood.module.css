@@ -69,13 +69,16 @@
 
 .moodOptions {
   display: flex;
-  justify-content: center;
+  justify-content: flex-start;
   gap: var(--spacing-sm);
   margin-bottom: var(--spacing-lg);
   overflow-x: auto;
-  padding: var(--spacing-xs) 0;
+  overflow-y: hidden;
+  padding: var(--spacing-xs) var(--spacing-sm);
   scrollbar-width: none;
   -ms-overflow-style: none;
+  white-space: nowrap;
+  -webkit-overflow-scrolling: touch;
 }
 
 .moodOptions::-webkit-scrollbar {
@@ -87,14 +90,16 @@
   flex-direction: column;
   align-items: center;
   gap: var(--spacing-xs);
-  padding: var(--spacing-sm) var(--spacing-xs);
+  padding: var(--spacing-sm);
   border: 2px solid transparent;
   border-radius: var(--radius-md);
   cursor: pointer;
   transition: all var(--transition-medium);
   background: var(--background-white);
-  min-width: 70px;
+  min-width: 80px;
+  max-width: 80px;
   flex-shrink: 0;
+  flex-grow: 0;
 }
 
 .moodOption:hover {
@@ -234,6 +239,65 @@
   text-align: center;
   padding: var(--spacing-xl);
   color: var(--text-light);
+}
+
+/* Mobile-specific mood options styling */
+@media (max-width: 640px) {
+  .moodOptions {
+    justify-content: flex-start;
+    gap: var(--spacing-xs);
+    padding: var(--spacing-xs) var(--spacing-sm);
+    margin-left: calc(-1 * var(--spacing-sm));
+    margin-right: calc(-1 * var(--spacing-sm));
+    margin-bottom: var(--spacing-lg);
+    overflow-x: auto;
+    overflow-y: hidden;
+    scroll-snap-type: x mandatory;
+  }
+  
+  .moodOption {
+    min-width: 70px;
+    max-width: 70px;
+    padding: var(--spacing-sm) var(--spacing-xs);
+    scroll-snap-align: start;
+  }
+  
+  .moodEmoji {
+    font-size: 1.8rem;
+  }
+  
+  .moodLabel {
+    font-size: 10px;
+    line-height: 1.1;
+  }
+}
+
+/* Tablet adjustments */
+@media (min-width: 641px) and (max-width: 1023px) {
+  .moodOptions {
+    justify-content: center;
+    flex-wrap: nowrap;
+    overflow-x: auto;
+  }
+  
+  .moodOption {
+    min-width: 85px;
+    max-width: 85px;
+  }
+}
+
+/* Desktop - center options */
+@media (min-width: 1024px) {
+  .moodOptions {
+    justify-content: center;
+    overflow-x: visible;
+    flex-wrap: wrap;
+  }
+  
+  .moodOption {
+    min-width: 90px;
+    max-width: 90px;
+  }
 }
 
 @media (min-width: 640px) {

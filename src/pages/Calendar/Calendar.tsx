@@ -1,6 +1,9 @@
 import { useState, useEffect } from 'react';
-import { Calendar as CalendarIcon, Plus, ChevronLeft, ChevronRight, BookOpen, FileText, Clock, Copy, ArrowRight, Trash2 } from 'lucide-react';
+import { Calendar as CalendarIcon, Plus, ChevronLeft, ChevronRight, BookOpen, FileText, Clock, Copy, ArrowRight, Trash2, Settings } from 'lucide-react';
 import { useLocalStorage } from '../../hooks/useLocalStorage';
+import { useCalendarNotifications } from '../../hooks/useCalendarNotifications';
+import { NotificationSettings } from '../../components/NotificationSettings/NotificationSettings';
+import { NotificationWelcome } from '../../components/NotificationWelcome/NotificationWelcome';
 import type { CalendarEvent } from '../../types';
 import styles from './Calendar.module.css';
 
@@ -10,7 +13,11 @@ export function Calendar() {
   const [selectedDate, setSelectedDate] = useState<string | null>(null);
   const [showAddForm, setShowAddForm] = useState(false);
   const [showMoveForm, setShowMoveForm] = useState(false);
+  const [showNotificationSettings, setShowNotificationSettings] = useState(false);
   const [eventToMove, setEventToMove] = useState<CalendarEvent | null>(null);
+  
+  // Hook para notificaciones de calendario
+  const { scheduleEventNotification } = useCalendarNotifications();
   const [newEvent, setNewEvent] = useState({
     title: '',
     date: '',
@@ -75,6 +82,10 @@ export function Calendar() {
         description: newEvent.description || undefined
       };
       setEvents(prev => [...prev, event]);
+      
+      // Programar notificación para el nuevo evento
+      scheduleEventNotification(event);
+      
       setNewEvent({ 
         title: '', 
         date: '', 
@@ -155,14 +166,29 @@ export function Calendar() {
           <CalendarIcon className={styles.titleIcon} size={28} />
           Calendario
         </h1>
-        <button 
-          className={styles.addButton}
-          onClick={() => setShowAddForm(true)}
-        >
-          <Plus size={20} />
-          Agregar Evento
-        </button>
+        <div className={styles.headerButtons}>
+          <button 
+            className={styles.settingsButton}
+            onClick={() => setShowNotificationSettings(!showNotificationSettings)}
+            title="Configurar notificaciones"
+          >
+            <Settings size={20} />
+          </button>
+          <button 
+            className={styles.addButton}
+            onClick={() => setShowAddForm(true)}
+          >
+            <Plus size={20} />
+            Agregar Evento
+          </button>
+        </div>
       </header>
+
+      <NotificationWelcome />
+
+      {showNotificationSettings && (
+        <NotificationSettings />
+      )}
 
       {showAddForm && (
         <div className={`${styles.addEventForm} ${styles[newEvent.category]}`}>

@@ -1,7 +1,7 @@
 .homePage {
   flex: 1;
   padding: var(--spacing-md);
-  padding-bottom: 100px; /* Space for bottom nav on mobile */
+  padding-bottom: 120px; /* More space for improved bottom nav on mobile */
   max-width: 900px;
   margin: 0 auto;
   width: 100%;
@@ -216,6 +216,10 @@
   font-weight: var(--font-weight-medium);
 }
 
+.motivationalSectionMobile {
+  display: none; /* Oculto por defecto, solo se muestra en móvil */
+}
+
 @media (min-width: 768px) {
   .homePage {
     padding: var(--spacing-xl);
@@ -319,5 +323,90 @@
     display: flex;
     justify-content: center;
     width: 100%;
+  }
+}
+
+/* Mobile-specific layout (≤640px) */
+@media (max-width: 640px) {
+  .homePage {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-md);
+  }
+
+  .header {
+    order: 1;
+    margin-bottom: var(--spacing-md);
+  }
+
+  .topSection {
+    flex-direction: column;
+    gap: 0;
+    align-items: stretch;
+  }
+
+  .greetingSection {
+    order: 1;
+    margin-bottom: var(--spacing-md);
+    width: 100%;
+  }
+
+  /* Esconder el motivationalSection del header en móvil */
+  .topSection .motivationalSection {
+    display: none;
+  }
+
+  .timerSection {
+    order: 2;
+    margin: var(--spacing-md) 0;
+  }
+
+  .statsSection {
+    order: 3;
+    margin: var(--spacing-md) 0;
+  }
+
+  /* Mostrar el motivationalSectionMobile después del statsSection */
+  .motivationalSectionMobile {
+    order: 4;
+    display: block;
+    margin-top: var(--spacing-md);
+    margin-left: 0;
+    max-width: none;
+    width: 100%;
+  }
+
+  .keepPushing {
+    order: 5;
+    margin: var(--spacing-md) auto;
+    max-width: none;
+    padding: var(--spacing-lg);
+  }
+
+  .moodButton {
+    order: 6;
+    margin: var(--spacing-lg) auto 0;
+    max-width: none;
+  }
+
+  /* Ensure proper spacing and full width on mobile */
+  .homePage > * {
+    flex-shrink: 0;
+    width: 100%;
+  }
+
+  /* Adjust button styles for mobile */
+  .statsButton {
+    max-width: none;
+    width: 100%;
+  }
+
+  .moodButton {
+    width: 100%;
+  }
+
+  .keepPushing {
+    width: 100%;
+    max-width: none;
   }
 }

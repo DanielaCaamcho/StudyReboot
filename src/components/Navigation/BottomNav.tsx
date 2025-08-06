@@ -1,4 +1,4 @@
-import { Home, HelpCircle, FileText, Calendar, Heart, User, BarChart3 } from 'lucide-react';
+import { Home, HelpCircle, FileText, Calendar, Heart, User, BarChart3, CheckSquare } from 'lucide-react';
 import type { Page } from '../../types';
 import styles from './BottomNav.module.css';
 
@@ -12,6 +12,7 @@ export function BottomNav({ currentPage, onPageChange }: BottomNavProps) {
     { id: 'home' as Page, label: 'Inicio', icon: Home },
     { id: 'questions' as Page, label: 'Preguntas', icon: HelpCircle },
     { id: 'notes' as Page, label: 'Notas', icon: FileText },
+    { id: 'todolist' as Page, label: 'Todo List', icon: CheckSquare },
     { id: 'calendar' as Page, label: 'Calendario', icon: Calendar },
     { id: 'stats' as Page, label: 'Estadísticas', icon: BarChart3 },
     { id: 'mood' as Page, label: 'Estado', icon: Heart },

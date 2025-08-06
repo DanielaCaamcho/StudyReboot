@@ -73,6 +73,10 @@ export function Home({ onPageChange }: HomeProps) {
         </button>
       </div>
 
+      <div className={styles.motivationalSectionMobile}>
+        <MotivationalMessage />
+      </div>
+
       <div className={styles.keepPushing} onClick={handleEncouragementClick}>
         <div className={styles.encouragementIcon}>🌟</div>
         <div className={styles.keepPushingText}>

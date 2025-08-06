@@ -706,3 +706,31 @@
   padding-top: var(--spacing-md);
   border-top: 1px solid var(--border-light);
 }
+
+.headerButtons {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+}
+
+.settingsButton {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--spacing-sm);
+  border-radius: var(--radius-md);
+  background: var(--background-light);
+  color: var(--text-medium);
+  border: 1px solid var(--border-light);
+  cursor: pointer;
+  transition: all var(--transition-medium);
+  min-width: 40px;
+  height: 40px;
+}
+
+.settingsButton:hover {
+  background: var(--primary-blue);
+  color: white;
+  border-color: var(--primary-blue);
+  transform: translateY(-1px);
+}

@@ -7,6 +7,7 @@ import { AuthProvider } from './contexts/AuthContext';
 import { Home } from './pages/Home/Home';
 import { Questions } from './pages/Questions/Questions';
 import { Notes } from './pages/Notes/Notes';
+import { TodoList } from './pages/TodoList/TodoList';
 import { Calendar } from './pages/Calendar/Calendar';
 import { Mood } from './pages/Mood/Mood';
 import { Stats } from './pages/Stats/Stats';
@@ -34,6 +35,8 @@ function AppContent() {
         return <Questions />;
       case 'notes':
         return <Notes />;
+      case 'todolist':
+        return <TodoList />;
       case 'calendar':
         return <Calendar />;
       case 'mood':
