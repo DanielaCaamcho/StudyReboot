@@ -20,6 +20,7 @@ export interface Note {
   title: string;
   content: string;
   category: string;
+  isCompleted: boolean;
   createdAt: Date;
   updatedAt: Date;
 }
@@ -38,6 +39,7 @@ export interface CalendarEvent {
   date: string;
   time?: string;
   type: 'exam' | 'assignment' | 'study' | 'other';
+  category: 'personal' | 'estudio';
   description?: string;
 }
 
@@ -46,7 +48,6 @@ export interface MoodEntry {
   date: string;
   mood: 'excellent' | 'good' | 'okay' | 'stressed' | 'sad';
   note?: string;
-  studyHours?: number;
 }
 
 export interface StudyStats {
@@ -58,4 +59,27 @@ export interface StudyStats {
   weeklyData: { day: string; hours: number }[];
 }
 
-export type Page = 'home' | 'questions' | 'notes' | 'calendar' | 'mood' | 'stats';
+export type Page = 'home' | 'questions' | 'notes' | 'calendar' | 'mood' | 'login' | 'stats';
+
+export interface User {
+  id: string;
+  email: string;
+  displayName?: string;
+  createdAt: Date;
+}
+
+export interface UserData {
+  studySessions: StudySession[];
+  questions: Question[];
+  notes: Note[];
+  tasks: Task[];
+  calendarEvents: CalendarEvent[];
+  moodEntries: MoodEntry[];
+  settings?: UserSettings;
+}
+
+export interface UserSettings {
+  theme?: 'light' | 'dark';
+  notifications?: boolean;
+  defaultStudyDuration?: number;
+}

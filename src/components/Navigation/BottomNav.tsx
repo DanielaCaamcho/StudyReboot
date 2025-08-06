@@ -1,4 +1,4 @@
-import { Home, HelpCircle, FileText, Calendar, Heart, BarChart3 } from 'lucide-react';
+import { Home, HelpCircle, FileText, Calendar, Heart, User, BarChart3 } from 'lucide-react';
 import type { Page } from '../../types';
 import styles from './BottomNav.module.css';
 
@@ -15,6 +15,7 @@ export function BottomNav({ currentPage, onPageChange }: BottomNavProps) {
     { id: 'calendar' as Page, label: 'Calendario', icon: Calendar },
     { id: 'stats' as Page, label: 'Estadísticas', icon: BarChart3 },
     { id: 'mood' as Page, label: 'Estado', icon: Heart },
+    { id: 'login' as Page, label: 'Cuenta', icon: User },
   ];
 
   return (

@@ -44,16 +44,10 @@
   font-size: var(--font-size-2xl);
   font-weight: var(--font-weight-bold);
   color: var(--text-dark);
-  margin-bottom: var(--spacing-sm);
 }
 
 .titleIcon {
   color: var(--primary-blue);
-}
-
-.subtitle {
-  font-size: var(--font-size-base);
-  color: var(--text-medium);
 }
 
 .currentMoodSection {
@@ -76,23 +70,31 @@
 .moodOptions {
   display: flex;
   justify-content: center;
-  gap: var(--spacing-md);
-  flex-wrap: wrap;
+  gap: var(--spacing-sm);
   margin-bottom: var(--spacing-lg);
+  overflow-x: auto;
+  padding: var(--spacing-xs) 0;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+.moodOptions::-webkit-scrollbar {
+  display: none;
 }
 
 .moodOption {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: var(--spacing-sm);
-  padding: var(--spacing-md);
+  gap: var(--spacing-xs);
+  padding: var(--spacing-sm) var(--spacing-xs);
   border: 2px solid transparent;
-  border-radius: var(--radius-lg);
+  border-radius: var(--radius-md);
   cursor: pointer;
   transition: all var(--transition-medium);
   background: var(--background-white);
-  min-width: 80px;
+  min-width: 70px;
+  flex-shrink: 0;
 }
 
 .moodOption:hover {
@@ -107,15 +109,16 @@
 }
 
 .moodEmoji {
-  font-size: 2.5rem;
-  margin-bottom: var(--spacing-xs);
+  font-size: 2rem;
+  margin-bottom: 0;
 }
 
 .moodLabel {
-  font-size: var(--font-size-small);
+  font-size: var(--font-size-xs);
   font-weight: var(--font-weight-medium);
   color: var(--text-dark);
   text-align: center;
+  line-height: 1.2;
 }
 
 .noteInput {
@@ -201,12 +204,6 @@
   color: var(--text-dark);
 }
 
-.entryStudyHours {
-  font-size: var(--font-size-small);
-  color: var(--accent-green);
-  font-weight: var(--font-weight-medium);
-}
-
 .statsGrid {
   display: grid;
   grid-template-columns: 1fr;
@@ -256,16 +253,26 @@
   }
   
   .moodOptions {
-    gap: var(--spacing-lg);
+    gap: var(--spacing-md);
+    justify-content: center;
+    overflow-x: visible;
   }
   
   .moodOption {
-    padding: var(--spacing-lg);
-    min-width: 100px;
+    padding: var(--spacing-md) var(--spacing-sm);
+    min-width: 80px;
+  }
+  
+  .moodEmoji {
+    font-size: 2.2rem;
+  }
+  
+  .moodLabel {
+    font-size: var(--font-size-small);
   }
   
   .statsGrid {
-    grid-template-columns: repeat(3, 1fr);
+    grid-template-columns: repeat(2, 1fr);
   }
 
   .currentMoodSection,

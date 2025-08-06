@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { HelpCircle, Plus, Search, Circle, CheckCircle, FileText, Check } from 'lucide-react';
+import { HelpCircle, Plus, Search, Circle, CheckCircle, FileText, Check, Trash2 } from 'lucide-react';
 import { useLocalStorage } from '../../hooks/useLocalStorage';
 import type { Question } from '../../types';
 import styles from './Questions.module.css';
@@ -47,6 +47,10 @@ export function Questions() {
     setQuestions(prev =>
       prev.map(q => q.id === id ? { ...q, notes: note } : q)
     );
+  };
+
+  const deleteQuestion = (id: string) => {
+    setQuestions(prev => prev.filter(q => q.id !== id));
   };
 
   const startEditingNote = (id: string, currentNote: string = '') => {
@@ -151,59 +155,67 @@ export function Questions() {
                       {new Date(question.createdAt).toLocaleDateString()}
                     </span>
                   </div>
-                  {question.notes && editingNoteId !== question.id && (
-                    <div className={styles.notes}>
-                      <strong>Notas:</strong> {question.notes}
-                    </div>
-                  )}
-                  
-                  {editingNoteId === question.id && (
-                    <div className={styles.noteEditor}>
-                      <textarea
-                        value={noteText}
-                        onChange={(e) => setNoteText(e.target.value)}
-                        placeholder="Escribe tu nota aquí..."
-                        className={styles.noteTextarea}
-                        rows={3}
-                        autoFocus
-                      />
-                      <div className={styles.noteActions}>
-                        <button
-                          className={`${styles.actionButton} ${styles.save}`}
-                          onClick={() => saveNote(question.id)}
-                        >
-                          Guardar
-                        </button>
-                        <button
-                          className={styles.actionButton}
-                          onClick={cancelEditingNote}
-                        >
-                          Cancelar
-                        </button>
-                      </div>
-                    </div>
-                  )}
-                  
-                  {editingNoteId !== question.id && (
-                    <div className={styles.questionActions}>
-                      <button
-                        className={`${styles.actionButton} ${question.isResolved ? '' : styles.resolve}`}
-                        onClick={() => toggleResolved(question.id)}
-                      >
-                        <Check size={16} />
-                        {question.isResolved ? 'Marcar Pendiente' : 'Marcar Resuelta'}
-                      </button>
-                      <button
-                        className={styles.actionButton}
-                        onClick={() => startEditingNote(question.id, question.notes || '')}
-                      >
-                        <FileText size={16} />
-                        {question.notes ? 'Editar Nota' : 'Agregar Nota'}
-                      </button>
-                    </div>
-                  )}
                 </div>
+                <button 
+                  className={styles.deleteButton}
+                  onClick={() => deleteQuestion(question.id)}
+                  title="Eliminar pregunta"
+                >
+                  <Trash2 size={16} />
+                </button>
               </div>
+              
+              {question.notes && editingNoteId !== question.id && (
+                <div className={styles.notes}>
+                  <strong>Notas:</strong> {question.notes}
+                </div>
+              )}
+              
+              {editingNoteId === question.id && (
+                <div className={styles.noteEditor}>
+                  <textarea
+                    value={noteText}
+                    onChange={(e) => setNoteText(e.target.value)}
+                    placeholder="Escribe tu nota aquí..."
+                    className={styles.noteTextarea}
+                    rows={3}
+                    autoFocus
+                  />
+                  <div className={styles.noteActions}>
+                    <button
+                      className={`${styles.actionButton} ${styles.save}`}
+                      onClick={() => saveNote(question.id)}
+                    >
+                      Guardar
+                    </button>
+                    <button
+                      className={styles.actionButton}
+                      onClick={cancelEditingNote}
+                    >
+                      Cancelar
+                    </button>
+                  </div>
+                </div>
+              )}
+              
+              {editingNoteId !== question.id && (
+                <div className={styles.questionActions}>
+                  <button
+                    className={`${styles.actionButton} ${question.isResolved ? '' : styles.resolve}`}
+                    onClick={() => toggleResolved(question.id)}
+                  >
+                    <Check size={16} />
+                    {question.isResolved ? 'Marcar Pendiente' : 'Marcar Resuelta'}
+                  </button>
+                  <button
+                    className={styles.actionButton}
+                    onClick={() => startEditingNote(question.id, question.notes || '')}
+                  >
+                    <FileText size={16} />
+                    {question.notes ? 'Editar Nota' : 'Agregar Nota'}
+                  </button>
+                </div>
+              )}
             </div>
           ))
         )}

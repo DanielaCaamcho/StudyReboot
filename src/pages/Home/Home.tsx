@@ -59,6 +59,20 @@ export function Home({ onPageChange }: HomeProps) {
         <Timer />
       </div>
 
+      <div className={styles.statsSection}>
+        <button 
+          className={styles.statsButton}
+          onClick={() => onPageChange('stats')}
+        >
+          <div className={styles.statsButtonContent}>
+            <BarChart3 size={20} />
+            <span className={styles.statsButtonText}>
+              Ver estadísticas
+            </span>
+          </div>
+        </button>
+      </div>
+
       <div className={styles.keepPushing} onClick={handleEncouragementClick}>
         <div className={styles.encouragementIcon}>🌟</div>
         <div className={styles.keepPushingText}>
@@ -80,20 +94,6 @@ export function Home({ onPageChange }: HomeProps) {
           <ChevronRight size={20} />
         </div>
       </button>
-
-      <div className={styles.statsSection}>
-        <button 
-          className={styles.statsButton}
-          onClick={() => onPageChange('stats')}
-        >
-          <div className={styles.statsButtonContent}>
-            <BarChart3 size={20} />
-            <span className={styles.statsButtonText}>
-              Ver estadísticas
-            </span>
-          </div>
-        </button>
-      </div>
     </div>
   );
 }

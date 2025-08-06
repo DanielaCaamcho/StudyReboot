@@ -1,7 +1,6 @@
 import { useState } from 'react';
 import { Heart } from 'lucide-react';
 import { useLocalStorage } from '../../hooks/useLocalStorage';
-import { useTimer } from '../../hooks/useTimer';
 import type { MoodEntry } from '../../types';
 import styles from './Mood.module.css';
 
@@ -10,22 +9,17 @@ export function Mood() {
   const [selectedMood, setSelectedMood] = useState<MoodEntry['mood'] | null>(null);
   const [note, setNote] = useState('');
   const [period, setPeriod] = useState<'week' | 'month'>('week');
-  const { sessions } = useTimer();
 
   const moodOptions = [
-    { value: 'excellent' as const, emoji: '😄', label: 'Excellent' },
-    { value: 'good' as const, emoji: '😊', label: 'Good' },
-    { value: 'okay' as const, emoji: '😐', label: 'Okay' },
-    { value: 'stressed' as const, emoji: '😰', label: 'Stressed' },
-    { value: 'sad' as const, emoji: '😢', label: 'Sad' }
+    { value: 'excellent' as const, emoji: '😄', label: 'Excelente' },
+    { value: 'good' as const, emoji: '😊', label: 'Bien' },
+    { value: 'okay' as const, emoji: '😐', label: 'Regular' },
+    { value: 'stressed' as const, emoji: '😰', label: 'Estresado' },
+    { value: 'sad' as const, emoji: '😢', label: 'Triste' }
   ];
 
   const today = new Date().toISOString().split('T')[0];
   const todayEntry = moodEntries.find(entry => entry.date === today);
-
-  // Calculate today's study hours
-  const todaySessions = sessions.filter(session => session.date === today);
-  const todayStudyHours = todaySessions.reduce((total, session) => total + session.duration, 0) / 3600;
 
   const handleSaveMood = () => {
     if (selectedMood) {
@@ -33,8 +27,7 @@ export function Mood() {
         id: Date.now().toString(),
         date: today,
         mood: selectedMood,
-        note: note.trim() || undefined,
-        studyHours: todayStudyHours
+        note: note.trim() || undefined
       };
 
       if (todayEntry) {
@@ -74,10 +67,6 @@ export function Mood() {
       }, 0) / periodEntries.length
     : 0;
 
-  const averageStudyHours = periodEntries.length > 0
-    ? periodEntries.reduce((sum, entry) => sum + (entry.studyHours || 0), 0) / periodEntries.length
-    : 0;
-
   const mostCommonMood = periodEntries.length > 0 
     ? Object.entries(
         periodEntries.reduce((acc, entry) => {
@@ -92,16 +81,13 @@ export function Mood() {
       <header className={styles.header}>
         <h1 className={styles.title}>
           <Heart className={styles.titleIcon} size={28} />
-          Mood
+          Estado de Ánimo
         </h1>
-        <p className={styles.subtitle}>
-          {period === 'week' ? 'Past Week' : 'Past Month'}
-        </p>
       </header>
 
       {!todayEntry && (
         <div className={styles.currentMoodSection}>
-          <h2 className={styles.sectionTitle}>How are you feeling today?</h2>
+          <h2 className={styles.sectionTitle}>¿Cómo te sientes hoy?</h2>
           
           <div className={styles.moodOptions}>
             {moodOptions.map(option => (
@@ -117,7 +103,7 @@ export function Mood() {
           </div>
 
           <textarea
-            placeholder="Add a note about your day (optional)..."
+            placeholder="Agrega una nota sobre tu día (opcional)..."
             value={note}
             onChange={(e) => setNote(e.target.value)}
             className={`input textarea ${styles.noteInput}`}
@@ -129,27 +115,22 @@ export function Mood() {
             onClick={handleSaveMood}
             disabled={!selectedMood}
           >
-            Save Mood
+            Guardar Estado de Ánimo
           </button>
         </div>
       )}
 
       {todayEntry && (
         <div className={styles.currentMoodSection}>
-          <h2 className={styles.sectionTitle}>Today's Mood</h2>
+          <h2 className={styles.sectionTitle}>Estado de Ánimo de Hoy</h2>
           <div className={styles.moodEntry}>
             <div className={styles.entryMood}>
               {moodOptions.find(m => m.value === todayEntry.mood)?.emoji}
             </div>
             <div className={styles.entryContent}>
-              <div className={styles.entryDate}>Today</div>
+              <div className={styles.entryDate}>Hoy</div>
               {todayEntry.note && (
                 <div className={styles.entryNote}>{todayEntry.note}</div>
-              )}
-              {todayEntry.studyHours && todayEntry.studyHours > 0 && (
-                <div className={styles.entryStudyHours}>
-                  {todayEntry.studyHours.toFixed(1)}h studied
-                </div>
               )}
             </div>
           </div>
@@ -163,13 +144,13 @@ export function Mood() {
               className={`${styles.periodButton} ${period === 'week' ? styles.active : ''}`}
               onClick={() => setPeriod('week')}
             >
-              Past Week
+              Última Semana
             </button>
             <button
               className={`${styles.periodButton} ${period === 'month' ? styles.active : ''}`}
               onClick={() => setPeriod('month')}
             >
-              Past Month
+              Último Mes
             </button>
           </div>
 
@@ -178,27 +159,21 @@ export function Mood() {
               <div className={styles.statValue}>
                 {averageMoodScore.toFixed(1)}
               </div>
-              <div className={styles.statLabel}>Avg Mood Score</div>
-            </div>
-            <div className={styles.statCard}>
-              <div className={styles.statValue}>
-                {averageStudyHours.toFixed(1)}h
-              </div>
-              <div className={styles.statLabel}>Avg Study Hours</div>
+              <div className={styles.statLabel}>Puntuación Promedio</div>
             </div>
             <div className={styles.statCard}>
               <div className={styles.statValue}>
                 {moodOptions.find(m => m.value === mostCommonMood)?.emoji || '—'}
               </div>
-              <div className={styles.statLabel}>Most Common</div>
+              <div className={styles.statLabel}>Estado Más Común</div>
             </div>
           </div>
 
-          <h3 className={styles.sectionTitle}>Mood History</h3>
+          <h3 className={styles.sectionTitle}>Historial de Estado de Ánimo</h3>
           <div className={styles.moodHistory}>
             {periodEntries.length === 0 ? (
               <div className={styles.emptyState}>
-                <p>No mood entries for this period.</p>
+                <p>No hay entradas de estado de ánimo para este período.</p>
               </div>
             ) : (
               periodEntries.map(entry => (
@@ -212,11 +187,6 @@ export function Mood() {
                     </div>
                     {entry.note && (
                       <div className={styles.entryNote}>{entry.note}</div>
-                    )}
-                    {entry.studyHours && entry.studyHours > 0 && (
-                      <div className={styles.entryStudyHours}>
-                        {entry.studyHours.toFixed(1)}h studied
-                      </div>
                     )}
                   </div>
                 </div>

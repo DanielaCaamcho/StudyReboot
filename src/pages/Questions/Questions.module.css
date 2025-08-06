@@ -118,8 +118,15 @@
 .questionHeader {
   display: flex;
   align-items: flex-start;
-  gap: var(--spacing-md);
+  justify-content: space-between;
+  gap: var(--spacing-sm);
   margin-bottom: var(--spacing-sm);
+}
+
+@media (min-width: 768px) {
+  .questionHeader {
+    gap: var(--spacing-md);
+  }
 }
 
 .statusButton {
@@ -187,6 +194,33 @@
 
 .questionContent {
   flex: 1;
+}
+
+.deleteButton {
+  background: rgba(239, 68, 68, 0.1);
+  color: var(--error-red);
+  border: none;
+  cursor: pointer;
+  padding: var(--spacing-xs);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  border-radius: var(--radius-md);
+  transition: all var(--transition-medium);
+  flex-shrink: 0;
+}
+
+.deleteButton:hover {
+  background: rgba(239, 68, 68, 0.2);
+  transform: scale(1.1);
+}
+
+.deleteButton:active {
+  background: var(--error-red);
+  color: white;
+  transform: scale(0.95);
 }
 
 .questionText {

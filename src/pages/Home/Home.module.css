@@ -180,6 +180,9 @@
 
 .statsSection {
   margin-top: var(--spacing-md);
+  display: flex;
+  justify-content: center;
+  width: 100%;
 }
 
 .statsButton {
@@ -189,8 +192,7 @@
   border-radius: var(--radius-lg);
   padding: var(--spacing-md);
   width: 100%;
-  max-width: 500px;
-  margin: 0 auto;
+  max-width: 400px;
   cursor: pointer;
   transition: all var(--transition-medium);
   display: block;
@@ -252,8 +254,13 @@
     margin: var(--spacing-xl) auto 0;
   }
   
+  .statsSection {
+    display: flex;
+    justify-content: center;
+  }
+  
   .statsButton {
-    max-width: 500px;
+    max-width: 400px;
   }
 }
 
@@ -298,8 +305,14 @@
     margin: var(--spacing-xl) auto 0;
   }
   
+  .statsSection {
+    display: flex;
+    justify-content: center;
+    width: 100%;
+  }
+  
   .statsButton {
-    max-width: 500px;
+    max-width: 400px;
   }
 
   .timerSection {

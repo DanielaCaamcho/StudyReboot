@@ -6,7 +6,7 @@ export function useTimer() {
   const [isRunning, setIsRunning] = useState(false);
   const [time, setTime] = useState(0); // seconds
   const [sessions, setSessions] = useLocalStorage<StudySession[]>('studySessions', []);
-  const intervalRef = useRef<number | null>(null);
+  const intervalRef = useRef<NodeJS.Timeout | null>(null);
   const startTimeRef = useRef<Date | null>(null);
 
   useEffect(() => {
