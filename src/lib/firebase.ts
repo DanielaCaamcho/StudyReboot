@@ -4,12 +4,12 @@ import { getFirestore } from 'firebase/firestore';
 
 // Configuración de Firebase usando variables de entorno
 const firebaseConfig = {
-  apiKey: import.meta.env.VITE_FIREBASE_API_KEY || "demo-api-key",
-  authDomain: import.meta.env.VITE_FIREBASE_AUTH_DOMAIN || "study-reboot-demo.firebaseapp.com",
-  projectId: import.meta.env.VITE_FIREBASE_PROJECT_ID || "study-reboot-demo",
-  storageBucket: import.meta.env.VITE_FIREBASE_STORAGE_BUCKET || "study-reboot-demo.appspot.com",
-  messagingSenderId: import.meta.env.VITE_FIREBASE_MESSAGING_SENDER_ID || "123456789",
-  appId: import.meta.env.VITE_FIREBASE_APP_ID || "demo-app-id"
+  apiKey: import.meta.env.VITE_FIREBASE_API_KEY || "AIzaSyB1vxh7shJcrNiDHqZy07qN3IqQps5PpuA",
+  authDomain: import.meta.env.VITE_FIREBASE_AUTH_DOMAIN || "study-reboot.firebaseapp.com",
+  projectId: import.meta.env.VITE_FIREBASE_PROJECT_ID || "study-reboot",
+  storageBucket: import.meta.env.VITE_FIREBASE_STORAGE_BUCKET || "study-reboot.firebasestorage.app",
+  messagingSenderId: import.meta.env.VITE_FIREBASE_MESSAGING_SENDER_ID || "1017200029815",
+  appId: import.meta.env.VITE_FIREBASE_APP_ID || "1:1017200029815:web:a4983fbb768cdb8bdf9672"
 };
 
 // Inicializar Firebase
