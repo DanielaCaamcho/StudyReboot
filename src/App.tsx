@@ -1,19 +1,34 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, Suspense, lazy } from 'react';
 import { BottomNav } from './components/Navigation/BottomNav';
 import { TopNav } from './components/Navigation/TopNav';
 // Activando Firebase real
 import { AuthProvider } from './contexts/AuthContext';
 // Para volver a demo si hay problemas: import { AuthProvider } from './contexts/AuthContextDemo';
 import { Home } from './pages/Home/Home';
-import { Questions } from './pages/Questions/Questions';
-import { Notes } from './pages/Notes/Notes';
-import { TodoList } from './pages/TodoList/TodoList';
-import { Calendar } from './pages/Calendar/Calendar';
-import { Mood } from './pages/Mood/Mood';
-import { Stats } from './pages/Stats/Stats';
-import { Login } from './pages/Login/Login';
 import type { Page } from './types';
 import './styles/globals.css';
+
+// Lazy loading de componentes para mejorar rendimiento
+const Questions = lazy(() => import('./pages/Questions/Questions').then(module => ({ default: module.Questions })));
+const Notes = lazy(() => import('./pages/Notes/Notes').then(module => ({ default: module.Notes })));
+const TodoList = lazy(() => import('./pages/TodoList/TodoList').then(module => ({ default: module.TodoList })));
+const Calendar = lazy(() => import('./pages/Calendar/Calendar').then(module => ({ default: module.Calendar })));
+const Mood = lazy(() => import('./pages/Mood/Mood').then(module => ({ default: module.Mood })));
+const Stats = lazy(() => import('./pages/Stats/Stats').then(module => ({ default: module.Stats })));
+const Login = lazy(() => import('./pages/Login/Login').then(module => ({ default: module.Login })));
+
+// Componente de loading
+const LoadingFallback = () => (
+  <div style={{ 
+    display: 'flex', 
+    justifyContent: 'center', 
+    alignItems: 'center', 
+    height: '50vh',
+    color: 'var(--primary-blue)'
+  }}>
+    <div>Cargando...</div>
+  </div>
+);
 
 function AppContent() {
   // Inicializar con la página guardada o 'home' por defecto
@@ -32,19 +47,47 @@ function AppContent() {
       case 'home':
         return <Home onPageChange={setCurrentPage} />;
       case 'questions':
-        return <Questions />;
+        return (
+          <Suspense fallback={<LoadingFallback />}>
+            <Questions />
+          </Suspense>
+        );
       case 'notes':
-        return <Notes />;
+        return (
+          <Suspense fallback={<LoadingFallback />}>
+            <Notes />
+          </Suspense>
+        );
       case 'todolist':
-        return <TodoList />;
+        return (
+          <Suspense fallback={<LoadingFallback />}>
+            <TodoList />
+          </Suspense>
+        );
       case 'calendar':
-        return <Calendar />;
+        return (
+          <Suspense fallback={<LoadingFallback />}>
+            <Calendar />
+          </Suspense>
+        );
       case 'mood':
-        return <Mood />;
+        return (
+          <Suspense fallback={<LoadingFallback />}>
+            <Mood />
+          </Suspense>
+        );
       case 'login':
-        return <Login />;
+        return (
+          <Suspense fallback={<LoadingFallback />}>
+            <Login />
+          </Suspense>
+        );
       case 'stats':
-        return <Stats />;
+        return (
+          <Suspense fallback={<LoadingFallback />}>
+            <Stats />
+          </Suspense>
+        );
       default:
         return <Home onPageChange={setCurrentPage} />;
     }

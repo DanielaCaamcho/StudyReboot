@@ -1,7 +1,6 @@
 import { useState } from 'react';
 import { User, Mail, Lock, Eye, EyeOff, RefreshCw } from 'lucide-react';
 import { useAuth } from '../../contexts/AuthContext';
-import { useDataSync } from '../../hooks/useDataSync';
 import styles from './Login.module.css';
 
 export function Login() {
@@ -11,11 +10,9 @@ export function Login() {
   const [displayName, setDisplayName] = useState('');
   const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
-  const [syncLoading, setSyncLoading] = useState(false);
   const [error, setError] = useState('');
   
-  const { user, login, register, logout } = useAuth();
-  const { syncCurrentData } = useDataSync();
+  const { user, login, register, logout, loading: authLoading } = useAuth();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -73,16 +70,16 @@ export function Login() {
     }
   };
 
-  const handleSync = async () => {
-    setSyncLoading(true);
-    try {
-      await syncCurrentData();
-    } catch (error) {
-      console.error('Error al sincronizar:', error);
-    } finally {
-      setSyncLoading(false);
-    }
-  };
+  if (authLoading) {
+    return (
+      <div className={styles.loginPage}>
+        <div className={styles.loadingContainer}>
+          <RefreshCw className="animate-spin" size={32} />
+          <p>Cargando...</p>
+        </div>
+      </div>
+    );
+  }
 
   if (user) {
     return (
@@ -113,14 +110,6 @@ export function Login() {
             
             <div className={styles.actions}>
               <button 
-                onClick={handleSync}
-                disabled={syncLoading}
-                className={`btn btn-secondary ${styles.syncButton}`}
-              >
-                <RefreshCw size={18} className={syncLoading ? styles.spinning : ''} />
-                {syncLoading ? 'Sincronizando...' : 'Sincronizar'}
-              </button>
-              <button 
                 onClick={handleLogout}
                 className={`btn btn-outline ${styles.logoutButton}`}
               >
@@ -130,7 +119,7 @@ export function Login() {
           </div>
 
           <div className={styles.syncSection}>
-            <h3 className={styles.sectionTitle}>Sincronización</h3>
+            <h3 className={styles.sectionTitle}>Estado de cuenta</h3>
             <p className={styles.syncDescription}>
               Tus datos se sincronizan automáticamente en la nube. 
               Puedes acceder desde cualquier dispositivo con tu cuenta.

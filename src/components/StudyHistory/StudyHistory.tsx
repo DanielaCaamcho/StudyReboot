@@ -1,13 +1,15 @@
 import { Calendar, Clock, Trophy, Flame, BarChart3, TrendingUp } from 'lucide-react';
+import { memo, useMemo } from 'react';
 import { useTimer } from '../../hooks/useTimer';
 import { useStudyStats } from '../../hooks/useStudyStats';
 import styles from './StudyHistory.module.css';
 
-export function StudyHistory() {
+export const StudyHistory = memo(function StudyHistory() {
   const { sessions } = useTimer();
   const stats = useStudyStats(sessions);
 
-  const formatDuration = (seconds: number) => {
+  // Memoizar funciones de formato para evitar recrearlas
+  const formatDuration = useMemo(() => (seconds: number) => {
     const hours = Math.floor(seconds / 3600);
     const minutes = Math.floor((seconds % 3600) / 60);
     
@@ -15,25 +17,25 @@ export function StudyHistory() {
       return `${hours}h ${minutes}m`;
     }
     return `${minutes}m`;
-  };
+  }, []);
 
-  const formatDate = (dateString: string) => {
+  const formatDate = useMemo(() => (dateString: string) => {
     const date = new Date(dateString);
     return date.toLocaleDateString('es-ES', {
       day: 'numeric',
       month: 'short'
     });
-  };
+  }, []);
 
-  // Get recent sessions (last 7 days)
-  const recentSessions = sessions
+  // Memoizar sesiones recientes para evitar recalcular
+  const recentSessions = useMemo(() => sessions
     .slice(-10)
     .reverse()
     .map(session => ({
       ...session,
       formattedDate: formatDate(session.date),
       formattedDuration: formatDuration(session.duration)
-    }));
+    })), [sessions, formatDate, formatDuration]);
 
   return (
     <div className={styles.historyContainer}>
@@ -167,4 +169,4 @@ export function StudyHistory() {
       )}
     </div>
   );
-}
+});

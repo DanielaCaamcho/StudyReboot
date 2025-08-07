@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useEffect, useCallback } from 'react';
 import { useAuth } from '../contexts/AuthContext';
 import type { UserData } from '../types';
 
@@ -8,14 +8,9 @@ import type { UserData } from '../types';
 export const useDataSync = () => {
   const { user, syncData, getUserData } = useAuth();
 
-  // Sincronizar datos locales con Firebase cuando el usuario inicia sesión
-  useEffect(() => {
-    if (user) {
-      syncLocalDataToCloud();
-    }
-  }, [user]);
-
-  const syncLocalDataToCloud = async () => {
+  const syncLocalDataToCloud = useCallback(async () => {
+    if (!user) return;
+    
     try {
       // Obtener datos almacenados localmente
       const localData: Partial<UserData> = {
@@ -43,9 +38,23 @@ export const useDataSync = () => {
     } catch (error) {
       console.error('Error al sincronizar datos:', error);
     }
-  };
+  }, [user, syncData, getUserData]);
 
-  const loadCloudData = async () => {
+  // Sincronizar datos locales con Firebase cuando el usuario inicia sesión
+  useEffect(() => {
+    if (user) {
+      // Solo ejecutar una vez cuando el usuario se autentica
+      const hasExecuted = sessionStorage.getItem(`sync-executed-${user.id}`);
+      if (!hasExecuted) {
+        syncLocalDataToCloud();
+        sessionStorage.setItem(`sync-executed-${user.id}`, 'true');
+      }
+    }
+  }, [user?.id, syncLocalDataToCloud]);
+
+  const loadCloudData = useCallback(async () => {
+    if (!user) return;
+    
     try {
       console.log('Cargando datos de la nube...');
       const cloudData = await getUserData();
@@ -73,16 +82,15 @@ export const useDataSync = () => {
         
         console.log('Datos de la nube cargados correctamente');
         
-        // Recargar la página para reflejar los datos actualizados
-        // Esto es una solución simple, en una app más compleja usarías state management
-        window.location.reload();
+        // NO recargar la página automáticamente para evitar loops
+        // window.location.reload();
       }
     } catch (error) {
       console.error('Error al cargar datos de la nube:', error);
     }
-  };
+  }, [user, getUserData]);
 
-  const syncCurrentData = async () => {
+  const syncCurrentData = useCallback(async () => {
     if (!user) return;
     
     try {
@@ -91,7 +99,7 @@ export const useDataSync = () => {
       console.error('Error al sincronizar datos:', error);
       throw error;
     }
-  };
+  }, [user, syncLocalDataToCloud]);
 
   return {
     syncCurrentData,

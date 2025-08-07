@@ -1,10 +1,10 @@
 import { Play, Pause, Square, CheckCircle } from 'lucide-react';
-import { useState } from 'react';
+import { useState, memo, useMemo } from 'react';
 import { useTimer } from '../../hooks/useTimer';
 import { SessionCompleteModal } from '../SessionCompleteModal/SessionCompleteModal';
 import styles from './Timer.module.css';
 
-export function Timer() {
+const Timer = memo(function Timer() {
   const { time, isRunning, startTimer, stopTimer, resetTimer, finishSession, formatTime, sessions } = useTimer();
   const [showModal, setShowModal] = useState(false);
   const [completedSessionDuration, setCompletedSessionDuration] = useState(0);
@@ -17,22 +17,33 @@ export function Timer() {
     }
   };
 
-  // Calculate total time today
-  const today = new Date().toISOString().split('T')[0];
-  const todaySessions = sessions.filter(session => session.date === today);
-  const totalTimeToday = todaySessions.reduce((total, session) => total + session.duration, 0) + time;
+  // Memoizar cálculos pesados para evitar recalcularlos en cada render
+  const { progress, strokeDashoffset, formattedTotalTime, circumference } = useMemo(() => {
+    // Calculate total time today
+    const today = new Date().toISOString().split('T')[0];
+    const todaySessions = sessions.filter(session => session.date === today);
+    const totalTimeToday = todaySessions.reduce((total, session) => total + session.duration, 0) + time;
 
-  // Calculate progress for circular timer (assuming 25 minutes = 100%)
-  const maxTime = 25 * 60; // 25 minutes in seconds
-  const progress = Math.min((time / maxTime) * 100, 100);
-  const circumference = 2 * Math.PI * 88; // radius of 88px
-  const strokeDashoffset = circumference - (progress / 100) * circumference;
+    // Calculate progress for circular timer (assuming 25 minutes = 100%)
+    const maxTime = 25 * 60; // 25 minutes in seconds
+    const progress = Math.min((time / maxTime) * 100, 100);
+    const circumference = 2 * Math.PI * 88; // radius of 88px
+    const strokeDashoffset = circumference - (progress / 100) * circumference;
 
-  const formatTotalTime = (seconds: number) => {
-    const hours = Math.floor(seconds / 3600);
-    const minutes = Math.floor((seconds % 3600) / 60);
-    return `${hours}h ${minutes}m`;
-  };
+    const formatTotalTime = (seconds: number) => {
+      const hours = Math.floor(seconds / 3600);
+      const minutes = Math.floor((seconds % 3600) / 60);
+      return `${hours}h ${minutes}m`;
+    };
+
+    return {
+      totalTimeToday,
+      progress,
+      strokeDashoffset,
+      formattedTotalTime: formatTotalTime(totalTimeToday),
+      circumference
+    };
+  }, [time, sessions]);
 
   return (
     <div className={styles.timerContainer}>
@@ -56,6 +67,9 @@ export function Timer() {
         <div className={styles.timerDisplay}>
           <div className={styles.timeText}>
             {formatTime(time)}
+          </div>
+          <div className={styles.progressText}>
+            {progress.toFixed(0)}% de 25min
           </div>
         </div>
       </div>
@@ -102,7 +116,7 @@ export function Timer() {
       <div className={styles.statsCard}>
         <div className={styles.statsTitle}>Has estudiado</div>
         <div className={styles.statsValue}>
-          {formatTotalTime(totalTimeToday)} hoy
+          {formattedTotalTime} hoy
         </div>
       </div>
 
@@ -113,4 +127,6 @@ export function Timer() {
       />
     </div>
   );
-}
+});
+
+export { Timer };

@@ -8,5 +8,24 @@ export default defineConfig({
   build: {
     outDir: 'dist',
     assetsDir: 'assets',
+    // Optimizaciones de rendimiento
+    rollupOptions: {
+      output: {
+        // Separar chunks para mejor caching
+        manualChunks: {
+          'vendor': ['react', 'react-dom'],
+          'firebase': ['firebase/app', 'firebase/auth', 'firebase/firestore'],
+          'icons': ['lucide-react']
+        }
+      }
+    },
+    // Optimizar bundle size
+    minify: 'esbuild', // Usar esbuild en lugar de terser
+  },
+  // Optimizaciones de desarrollo
+  server: {
+    hmr: {
+      overlay: false // Reducir overlays innecesarios
+    }
   }
 })

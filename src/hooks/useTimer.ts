@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef, useCallback } from 'react';
 import type { StudySession } from '../types';
 import { useLocalStorage } from './useLocalStorage';
 
@@ -9,11 +9,14 @@ export function useTimer() {
   const intervalRef = useRef<NodeJS.Timeout | null>(null);
   const startTimeRef = useRef<Date | null>(null);
 
+  // Optimización: usar useCallback para evitar re-creaciones innecesarias
+  const updateTimer = useCallback(() => {
+    setTime(prevTime => prevTime + 1);
+  }, []);
+
   useEffect(() => {
     if (isRunning) {
-      intervalRef.current = setInterval(() => {
-        setTime(prevTime => prevTime + 1);
-      }, 1000);
+      intervalRef.current = setInterval(updateTimer, 1000);
     } else {
       if (intervalRef.current) {
         clearInterval(intervalRef.current);
@@ -26,7 +29,7 @@ export function useTimer() {
         clearInterval(intervalRef.current);
       }
     };
-  }, [isRunning]);
+  }, [isRunning, updateTimer]);
 
   const startTimer = () => {
     setIsRunning(true);

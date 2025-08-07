@@ -41,22 +41,51 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, async (firebaseUser: FirebaseUser | null) => {
-      if (firebaseUser) {
-        const userData: User = {
-          id: firebaseUser.uid,
-          email: firebaseUser.email!,
-          displayName: firebaseUser.displayName || undefined,
-          createdAt: new Date(firebaseUser.metadata.creationTime!)
-        };
-        setUser(userData);
-      } else {
+    let timeoutId: NodeJS.Timeout;
+    
+    const unsubscribe = onAuthStateChanged(auth, (firebaseUser: FirebaseUser | null) => {
+      console.log('Auth state changed:', firebaseUser?.uid || 'null');
+      
+      try {
+        if (firebaseUser) {
+          const userData: User = {
+            id: firebaseUser.uid,
+            email: firebaseUser.email!,
+            displayName: firebaseUser.displayName || undefined,
+            createdAt: new Date(firebaseUser.metadata.creationTime!)
+          };
+          setUser(userData);
+          console.log('User set:', userData.email);
+        } else {
+          setUser(null);
+          console.log('User set to null');
+        }
+      } catch (error) {
+        console.error('Error in auth state change:', error);
         setUser(null);
       }
+      
+      // Limpiar timeout si el auth state cambió
+      if (timeoutId) {
+        clearTimeout(timeoutId);
+      }
+      
       setLoading(false);
+      console.log('Loading set to false');
     });
 
-    return unsubscribe;
+    // Timeout de seguridad reducido
+    timeoutId = setTimeout(() => {
+      console.warn('Auth timeout reached, forcing loading to false');
+      setLoading(false);
+    }, 5000); // Reducido a 5 segundos
+
+    return () => {
+      unsubscribe();
+      if (timeoutId) {
+        clearTimeout(timeoutId);
+      }
+    };
   }, []);
 
   const login = async (email: string, password: string): Promise<void> => {
@@ -69,22 +98,18 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
 
   const register = async (email: string, password: string, displayName: string): Promise<void> => {
     try {
+      console.log('Starting registration process...');
       const userCredential = await createUserWithEmailAndPassword(auth, email, password);
-      await updateProfile(userCredential.user, { displayName });
+      console.log('User created in Firebase Auth:', userCredential.user.uid);
       
-      // Crear documento de usuario en Firestore
-      await setDoc(doc(db, 'users', userCredential.user.uid), {
-        email,
-        displayName,
-        createdAt: new Date(),
-        studySessions: [],
-        questions: [],
-        notes: [],
-        tasks: [],
-        calendarEvents: [],
-        moodEntries: []
-      });
+      await updateProfile(userCredential.user, { displayName });
+      console.log('Profile updated with displayName:', displayName);
+      
+      // No crear documento de Firestore inmediatamente para evitar bloqueos
+      // Se creará más tarde cuando sea necesario
+      console.log('Registration completed successfully');
     } catch (error) {
+      console.error('Registration error:', error);
       throw error;
     }
   };
